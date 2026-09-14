@@ -75,6 +75,14 @@ nav.top .wrap{display:flex;align-items:center;justify-content:space-between;heig
 .hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
 .hero .mark{width:min(260px,28vw);height:auto;border-radius:24px;box-shadow:0 20px 60px rgba(47,179,214,.18)}
 
+/* The reel: a looping film band under the hero */
+.reel{background:var(--band);padding:0 0 64px}
+.reel-frame{position:relative;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 30px 80px rgba(0,0,0,.45);aspect-ratio:16/9}
+.reel-frame video{display:block;width:100%;height:100%;object-fit:cover}
+.reel-sound{position:absolute;right:16px;bottom:16px;font:600 13px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:rgba(244,241,234,.92);border:0;border-radius:999px;padding:10px 16px;cursor:pointer}
+.reel-sound:hover{background:var(--cyan)}
+.reel-caption{color:#D9D4C7;font-size:15px;margin:16px 4px 0;max-width:70ch}
+
 /* What it does: the sequence */
 .flow{margin-top:40px;display:grid;gap:18px}
 .flow-in{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;background:var(--band);color:var(--band-ink);border-radius:18px;padding:22px 26px}
@@ -311,13 +319,37 @@ footer a:hover{color:var(--ink)}
       <h1>AI that choreographs your post floor.</h1>
       <p class="lede">One sentence from the post supervisor, one press, and Cyan&#x27;s AI runs the floor: it stages the day, reads every take, minds the rough cut, packages the hand-offs, proposes the grade and keeps the record. Every chair finds its toil already done, and signs only the doors that matter.</p>
       <div class="ctas">
-        <a href="/ibc/" class="btn btn-cyan">Meet us at IBC 2026 · Planetcast stand</a>
+        <a href="#reel" class="btn btn-cyan">Watch one shoot day in 40 seconds</a>
         <a href="https://calendly.com/anirudh-vyas-blockxaero/30min" class="btn btn-ghost">Book a demo</a>
       </div>
     </div>
     <img class="mark" src="/assets/cyan-logo-512.png" alt="The Cyan mark" width="512" height="512">
   </div>
 </header>
+
+<!-- The reel: one shoot day, four chairs, recorded on the stand at IBC 2026; loops on its own, sound on request -->
+<section id="reel" class="reel" aria-label="The Cyan demo reel">
+  <div class="wrap">
+    <div class="reel-frame">
+      <video id="reelVideo" autoplay muted loop playsinline preload="metadata" poster="/assets/cyan-reel-poster.jpg">
+        <source src="/assets/cyan-reel.mp4" type="video/mp4">
+      </video>
+      <button id="reelSound" class="reel-sound" type="button" aria-pressed="false">Sound on</button>
+    </div>
+    <p class="reel-caption">One shoot day on four chairs — the post supervisor, the assistant, the editor, the colorist — recorded on the stand at IBC 2026. Nothing staged after the fact.</p>
+  </div>
+</section>
+<script>
+(function(){
+  var v=document.getElementById('reelVideo'),b=document.getElementById('reelSound');
+  if(!v||!b)return;
+  b.addEventListener('click',function(){
+    v.muted=!v.muted; if(!v.muted){v.currentTime=0;v.play().catch(function(){});}
+    b.textContent=v.muted?'Sound on':'Sound off'; b.setAttribute('aria-pressed',String(!v.muted));
+  });
+  if('IntersectionObserver' in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){v.play().catch(function(){});}else{v.pause();}});},{threshold:.25}).observe(v);}
+})();
+</script>
 
 <!-- What it does -->
 <section id="what" class="sec">
@@ -675,8 +707,8 @@ footer a:hover{color:var(--ink)}
 <section id="ibc" class="sec band">
   <div class="wrap">
     <p class="eyebrow">IBC 2026</p>
-    <h2>Cyan at IBC 2026 · on the Planetcast stand</h2>
-    <p class="lede">Ask the team for a live walk of one shoot day, from arrival to master. Talk to the team at the stand to plan your first room.</p>
+    <h2>Cyan was at IBC 2026 · on the Planetcast stand</h2>
+    <p class="lede">We walked one shoot day, from arrival to master, on the stand. The one-pagers and the contact card stay here; book a demo to plan your first room.</p>
     <div class="ibc-cards">
       <a class="ibc-card" href="/ibc/product.pdf"><span class="qr"><img src="/assets/qr-product.svg" alt="QR code for the product one-pager"></span><span><b>Product one&#8209;pager (PDF)</b><span>AI that choreographs your post floor.</span></span></a>
       <a class="ibc-card" href="/ibc/deploy.pdf"><span class="qr"><img src="/assets/qr-deploy.svg" alt="QR code for the deployment one-pager"></span><span><b>Deployment one&#8209;pager (PDF)</b><span>How Cyan would be deployed, as proposed.</span></span></a>
